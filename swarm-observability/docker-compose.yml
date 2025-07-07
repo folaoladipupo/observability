@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    configs:
+      - source: prometheus_config
+        target: /etc/prometheus/prometheus.yml
+    volumes:
+      - prometheus_data:/prometheus
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+
+  node-exporter:
+    image: prom/node-exporter
+    ports:
+      - "9100:9100"
+    deploy:
+      mode: global
+      restart_policy:
+        condition: always
+
+  blackbox-exporter:
+    image: prom/blackbox-exporter
+    ports:
+      - "9115:9115"
+    configs:
+      - source: blackbox_config
+        target: /etc/blackbox_exporter/config.yml
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+configs:
+  prometheus_config:
+    file: ./prometheus.yml
+  blackbox_config:
+    file: ./blackbox.yml
+
+volumes:
+  prometheus_data:
+  grafana_data:

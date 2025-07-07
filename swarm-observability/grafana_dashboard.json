@@ -1,0 +1,28 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "Blackbox Exporter HTTP Probes",
+    "panels": [
+      {
+        "type": "graph",
+        "title": "HTTP Probe Success",
+        "targets": [
+          {
+            "expr": "probe_success",
+            "legendFormat": "{{instance}}",
+            "refId": "A"
+          }
+        ],
+        "datasource": "Prometheus",
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        }
+      }
+    ],
+    "schemaVersion": 16,
+    "version": 1
+  }
+}
